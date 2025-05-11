@@ -6,3 +6,5 @@ public enum SkillLevel {
     AVANZADO,
     ISTARI
 }
+
+

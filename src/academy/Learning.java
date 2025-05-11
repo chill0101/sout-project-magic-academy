@@ -1,4 +1,13 @@
 package academy;
 
-public class Learning {
+import exceptions.AlreadyTriedToLearn;
+import exceptions.InsuffitientRequiredSkillLevel;
+import users.Student;
+
+public class Learning{
+    private Spell spell;
+    private Student student;
+
+
+
 }

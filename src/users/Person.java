@@ -1,13 +1,16 @@
 package users;
 
+import academy.SkillLevel;
+import academy.Spell;
+
 import java.util.ArrayList;
 
-public class Person {
+public abstract class Person {
     private String fullName;
-    private int skillLevel;
-    private ArrayList<String> spellsLearned;
+    private SkillLevel skillLevel;
+    private ArrayList<Spell> spellsLearned;
 
-    public Person(String fullName, int skillLevel) {
+    public Person(String fullName, SkillLevel skillLevel) {
         this.fullName = fullName;
         this.skillLevel = skillLevel;
         this.spellsLearned = new ArrayList<>();
@@ -21,19 +24,22 @@ public class Person {
         this.fullName = fullName;
     }
 
-    public int getSkillLevel() {
+    public SkillLevel getSkillLevel() {
         return skillLevel;
     }
 
-    public void setSkillLevel(int skillLevel) {
+    public void setSkillLevel(SkillLevel skillLevel) {
         this.skillLevel = skillLevel;
     }
 
-    public ArrayList<String> getSpellsLearned() {
+    public ArrayList<Spell> getSpellsLearned() {
         return spellsLearned;
     }
 
-    public void setSpellsLearned(ArrayList<String> spellsLearned) {
+    public void setSpellsLearned(ArrayList<Spell> spellsLearned) {
         this.spellsLearned = spellsLearned;
     }
+
+
+
 }
