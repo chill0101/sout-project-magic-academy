@@ -1,6 +1,9 @@
 import academy.AcademyManager;
+import academy.LearningSession;
 import academy.SkillLevel;
 import academy.Spell;
+import exceptions.AlreadyTriedToLearn;
+import exceptions.InsuffitientRequiredSkillLevel;
 import users.Director;
 import users.Student;
 
@@ -144,8 +147,17 @@ public class Main {
                     System.out.println("Nivel no válido");
                     continue;
             }
+            System.out.println("Ingrese la edad del estudiante: ");
+            int age = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            // Validate age
+            if (age < 0) {
+                System.out.println("Edad no válida");
+                continue; //TODO: SET THIS IN CLASS AND THROW EXCEPTION
+            }
 
-            Student student = new Student(studentName, level);
+
+            Student student = new Student(studentName, level, age);
             manager.registerStudent(student);
             System.out.println("Registro exitoso del estudiante: " + student.getFullName() + "\n");
             System.out.println("¿Desea agregar otro estudiante? (Y/N)");
@@ -191,8 +203,8 @@ public class Main {
                         manager.getSpells().forEach(spell -> System.out.println(spell.toString()));
                         break;
                     case 3:
-                        System.out.println("Iniciando sesión de aprendizaje...");
-                        // Go to Step 5
+                        LearningSession session = new LearningSession(manager, scanner);
+                        session.start();
                         break;
                     case 4:
                         System.out.println("ADIOS NO VUELVAS...");

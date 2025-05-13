@@ -8,21 +8,18 @@ import exceptions.InsuffitientRequiredSkillLevel;
 
 public class Student extends Person {
 
-    public Student(String fullName, SkillLevel skillLevel) {
+    private int age;
+
+    public Student(String fullName, SkillLevel skillLevel, int age) {
         super(fullName, skillLevel);
+        this.age = age;
     }
 
-    public void learnSpell(AcademyManager manager, Spell spell) {
-        try {
-            manager.learn(this, spell, getSkillLevel());
-            System.out.println("LEARNED");
-        } catch (InsuffitientRequiredSkillLevel | AlreadyTriedToLearn e){
-            System.out.println("Error: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("ERROR UNEXPECTED: " + e.getMessage());
-        }
+    public int getAge() {
+        return age;
     }
 
-
-
+    public void setAge(int age) {
+        this.age = age;
+    }
 }
