@@ -1,4 +1,6 @@
-package academy;
+package interfaces;
+import academy.SkillLevel;
+import academy.Spell;
 import exceptions.AlreadyTriedToLearn;
 import exceptions.InsuffitientRequiredSkillLevel;
 import users.Student;
@@ -7,5 +9,5 @@ import users.Student;
 
 public interface Learnable {
     void learn(Student student, Spell spell, SkillLevel skillLevel)
-        throws InsuffitientRequiredSkillLevel, AlreadyTriedToLearn;
+        throws InsuffitientRequiredSkillLevel, AlreadyTriedToLearn; // Method to learn a spell
 }

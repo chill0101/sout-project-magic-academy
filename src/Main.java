@@ -2,252 +2,276 @@ import academy.AcademyManager;
 import academy.LearningSession;
 import academy.SkillLevel;
 import academy.Spell;
-import exceptions.AlreadyTriedToLearn;
-import exceptions.InsuffitientRequiredSkillLevel;
+import exceptions.DuplicateStudentException;
+import utils.Art;
+import exceptions.DuplicateSpellException;
 import users.Director;
 import users.Student;
+import utils.InputUtils;
 
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
+        // For a better experience, open the console in full screen :D
 
-        System.out.println("Bienvenido perro!");
+        // Initial welcome text. It's a bit long, so I put it in a separate method
+        Art.CastleArt(); // Art class stores all the ASCII art and other text things
+        Art.BannerArt();
+
         Scanner scanner = new Scanner(System.in);
-        AcademyManager manager = new AcademyManager();
-        //Step 1 =>
-        /*
-         * "Welcome to the SOUT Academy[...]"
-         * "Please register the director[...]" => Use the singleton
-         * -- Scanner --
-         * -- Validate Input --
-         * IF input is not valid => Exception
-         * -- Create Director --
-         * IF Director is already registered => Message and continue
-         */
-        System.out.println("Bienvenido a SOUT Academy \n");
-        System.out.println("Por favor, registre al director de la academia \n");
-        String directorName = scanner.nextLine();
-        Director director = Director.getInstance(directorName);
-        System.out.println("El director de la academia es: " + director.getFullName() + "\n");
+
+        System.out.println("Presione Enter para continuar");
+        scanner.nextLine(); // Wait for the user to press Enter
+
+        //Step 1 => Instance of Director and AcademyManager
+        // Director it's a singleton class required, but symbolic for the program execution
+        // AcademyManager is the main class that manages the spells and students. It also calls the LearningSession class
+        System.out.println(
+            """
+            
+            
+            *==============================================================================================================================*
+            |                                                     # COMENCEMOS!                                                            |
+            *==============================================================================================================================*
+            |                                                                                                                              |
+            |        ## Descripción                                                                                                        |
+            |        Este programa le permitirá ejecutar un flujo simple y parcial simulando una academia de magia                         |
+            |        donde los estudiantes pueden aprender hechizos de diferentes elementos y niveles de habilidad.                        |
+            |                                                                                                                              |
+            |        ## Flujo del proceso                                                                                                  |
+            |        1. Registrar al director de la academia                                                                               |
+            |        2. Registrar hechizos                                                                                                 |
+            |        3. Registrar estudiantes                                                                                              |
+            |        4. Iniciar sesión de aprendizaje                                                                                      |
+            |        5. Ver lista de estudiantes                                                                                           |
+            |        6. Ver lista de hechizos                                                                                              |
+            |        7. Salir                                                                                                              |
+            |                                                                                                                              |
+            |                                                                                                                              |
+            *==============================================================================================================================*
+
+            """
+        );
+
+        System.out.println(
+                "*-------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*=== ** Lo primero será registrar al director de la academia ** ================================================================* \n" +
+                "*-------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*=== ** El director tendrá acceso a todos los hechizos registrados ** ==========================================================* \n"
+        );
+
+        String directorName = InputUtils.rejectNullInput(
+                scanner,
+                "*=== Ingrese el nombre del director: ===========================================================================================*"
+        ); // Use InputUtils class for group the input validation methods => rejectNullInput detects null inputs and warns the user
+
+        Art.LoadingSimulation(); // Simulate a loading with a simple for loop
+
+        // Singleton
+        Director director = Director.getInstance(directorName); // Use getInstance to get the singleton instance of Director with the input directorName
+
+        AcademyManager manager = new AcademyManager(director);  // Instance of AcademyManager with the director instance -- We are adding all spells to the director instance because the director it's super wise and powerful
+
+        // Comment ths to avoid having the default spells and students but is less boring to let them be :D
+        System.out.println(">>> Recuperando hechizos y estudiantes existentes...\n");
+        manager.registerSpell(new Spell("Hadouken", "Fuego", SkillLevel.BASICO)); // Registering default spells for testing purposes
+        manager.registerSpell(new Spell("Pepazo", "Tierra", SkillLevel.INTERMEDIO));
+        manager.registerSpell(new Spell("Flame of the Fell God", "Fuego", SkillLevel.AVANZADO));
+        manager.registerSpell(new Spell("Hell", "Fuego", SkillLevel.AVANZADO));
+
+        manager.registerStudent(new Student("Cosmo", SkillLevel.BASICO, 118)); // Registering default students for testing purposes
+        manager.registerStudent(new Student("Elmago Bochini", SkillLevel.AVANZADO, 25));
+        manager.registerStudent(new Student("Gargamel", SkillLevel.INTERMEDIO, 65));
+        manager.registerStudent(new Student("Lune", SkillLevel.AVANZADO, 33));
+        // End of default data section --
+
+        System.out.println(
+                "\n"+
+                "*=== El director de la academia ahora es ======================================================================================* \n" +
+                "*==============================================================================================================================* \n" +
+                "--- " + director.getFullName() + " \uD83E\uDDD9\uD83C\uDFFC\u200D♂\uFE0F                                                         \n" + // the weird chars are emojis
+                "*==============================================================================================================================*"
+        );
+
+        Art.Column();
 
 
-        //Step 2 =>
-        /*
-         * "Please register some spells[...]"
-         * -- Scanner --
-         * -- Validate Input --
-         * IF input is not valid => Exception
-         * -- IF name is already registered => Message and register again
-         * -- Create Spell --
-         * "Want to add another spell?[...]
-         * Options: "Y" or "N"
-         * IF Y => Go to Step 2
-         * IF N => Continue
-         */
-        System.out.println("Por favor, registre algunos hechizos \n");
-        while (true) {
-            System.out.println("Ingrese el nombre del hechizo: ");
-            String spellName = scanner.nextLine();
-            System.out.println("Ingrese el elemento del hechizo");
-            System.out.println("1. FUEGO, 2. AGUA, 3. TIERRA, 4. AIRE");
-            int IntElement = scanner.nextInt();
-            scanner.nextLine();
-            String element;
-            switch (IntElement) {
-                case 1:
-                    element = "Fuego";
-                    break;
-                case 2:
-                    element = "Agua";
-                    break;
-                case 3:
-                    element = "Tierra";
-                    break;
-                case 4:
-                    element = "Aire";
-                    break;
-                default:
-                    System.out.println("Elemento no válido");
-                    continue;
-            }
+        //Step 2 => Set up the academy - Spells
+        System.out.println(
+                "*-------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*=== ** Hora de Registrar a los nuevos hechizos! ** ============================================================================* \n" +
+                "*-------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*=== ** Por favor, Ingresa los datos necesarios para el registro ** ============================================================* \n"
+        );
+        while (true) { // I used a lot of while for the inputs and maybe there's more effective approaches
+           try {
+               String spellName = InputUtils.rejectNullInput(scanner,
+                       "*=== ** Ingrese el nombre del hechizo:  ** =====================================================================================* \n"
+               );
+               String element = InputUtils.elementInputOptions(scanner,
+                       "*=== ** Ingrese el elemento del hechizo: ** ===================================================================================* \n"
+               ); // Use InputUtils class for group the input validation methods => elementInputOptions shows the options and validates the input
 
 
-            System.out.println("Ingrese el nivel de habilidad del hechizo: " +
-                    "1. BASICO, 2. INTERMEDIO, 3. AVANZADO");
-            int IntLevel = scanner.nextInt();
-            scanner.nextLine();
-            SkillLevel level;
-            switch (IntLevel) {
-                case 1:
-                    level = SkillLevel.BASICO;
-                    break;
-                case 2:
-                    level = SkillLevel.INTERMEDIO;
-                    break;
-                case 3:
-                    level = SkillLevel.AVANZADO;
-                    break;
-                default:
-                    System.out.println("Nivel no válido");
-                    continue;
-            }
+               SkillLevel level = InputUtils.skillLevelInputOptions( scanner,
+                       "*=== ** Ingrese el nivel de habilidad del hechizo: ** =========================================================================* \n"
+               ); // Use InputUtils class for group the input validation methods => skillLevelInputOptions shows the options and validates the input
 
-            Spell spell = new Spell(spellName, element, level);
-            manager.registerSpell(spell);
-            System.out.println("Registro exitoso del hechizo: " + spell.getName() + "\n");
-            System.out.println("¿Desea agregar otro hechizo? (Y/N)");
-            String continueOption = scanner.nextLine().toUpperCase();
-            if (!continueOption.equals("Y")) {
-                System.out.println("Registro de hechizos finalizado \n");
-                break;
-            } else {
-                System.out.println("Continuando con el registro de hechizos \n");
+               Art.LoadingSimulation();
 
-            }
+               Spell spell = new Spell( spellName, element, level ); // Instance of Spell class with the input data
+               manager.registerSpell( spell ); // Register the spell in the academy manager with the manager method
+               System.out.println(
+                       "*=== Registro exitoso del hechizo::  ==========================================================================================* \n " +
+                       "*==============================================================================================================================* \n " +
+                       " --- " + spell.getName() + " ✨                                                                                                   \n " +
+                       "*==============================================================================================================================* \n "
+               );
+               System.out.println( "Registro exitoso del hechizo: " + spell.getName() + "\n" );
+
+               String continueOption;
+               while ( true ) { // while loop to validate the input
+                   continueOption = InputUtils.rejectNullInput(scanner, "--- Desea agregar otro hechizo? (Y/N) ---");
+                   if ( continueOption.equalsIgnoreCase( "Y") || continueOption.equalsIgnoreCase("N") ) {
+                       break;
+                   } else {
+                       System.out.println("--- Por favor, ingrese una opción válida (Y/N) ---");
+                   }
+               }
+
+               if (continueOption.equalsIgnoreCase("N")) {
+                   System.out.println("Registro de hechizos finalizado \n");
+                   break;
+               } else {
+                   System.out.println("Continuando con el registro de hechizos \n");
+               }
+
+
+           } catch (DuplicateSpellException e) { // Use the DuplicateSpellException to catch duplicate spells
+               System.out.println(e.getMessage() + ". Intente nuevamente.");
+           }
 
 
         }
 
         //Step 3 =>
-        /*
-         * "Please register some students[...]"
-         * -- Scanner --
-         * -- Validate Input --
-         * IF input is not valid => Exception
-         * -- IF name is already registered => Message and register again
-         * -- Create Student --
-         * "Want to add another student?[...]
-         * Options: "Y" or "N"
-         * IF Y => Go to Step 3
-         * IF N => Continue
-         *
-         *
-         */
-        System.out.println("Por favor, registre algunos estudiantes \n");
-        while (true) {
-            System.out.println("Ingrese el nombre del estudiante: ");
-            String studentName = scanner.nextLine();
-            System.out.println("Ingrese el nivel de habilidad del estudiante: " +
-                    "1. BASICO, 2. INTERMEDIO, 3. AVANZADO");
-            int IntLevel = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-            SkillLevel level;
-            switch (IntLevel) {
-                case 1:
-                    level = SkillLevel.BASICO;
-                    break;
-                case 2:
-                    level = SkillLevel.INTERMEDIO;
-                    break;
-                case 3:
-                    level = SkillLevel.AVANZADO;
-                    break;
-                default:
-                    System.out.println("Nivel no válido");
-                    continue;
-            }
-            System.out.println("Ingrese la edad del estudiante: ");
-            int age = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-            // Validate age
-            if (age < 0) {
-                System.out.println("Edad no válida");
-                continue; //TODO: SET THIS IN CLASS AND THROW EXCEPTION
+        System.out.println(
+                "*=== ** Hora de Registrar a los nuevos aprendices! ** ==================================================================================* \n" +
+                "*---------------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*=== ** Por favor, Ingresa los datos necesarios para el registro ** ====================================================================* \n"
+        );
+        while (true) { // This wile loop is for restart the process if the user wants to add more students
+            try {
+                String studentName = InputUtils.rejectNullInput(scanner,
+                        "*=== ** Ingrese el nombre del estudiante:  ** =========================================================================================* \n"
+                );
+                SkillLevel level = InputUtils.skillLevelInputOptions(scanner,
+                        "*=== ** Ingrese el nivel de habilidad del estudiante:  ** =============================================================================* \n"
+                );
+                int age = InputUtils.validateAgeInput(scanner,
+                        "*=== ** Ingrese la edad del estudiante: ** ============================================================================================* \n"
+                );
+
+                Student student = new Student(studentName, level, age);
+                manager.registerStudent(student);
+                System.out.println("Registro exitoso del estudiante: " + student.getFullName() + "\n");
+            } catch ( DuplicateStudentException e ) {
+                System.out.println(e.getMessage() + ". Intente nuevamente.");
             }
 
+            String continueOption;
+            while ( true ) {
+                continueOption = InputUtils.rejectNullInput(scanner, "--- Desea agregar otro estudiante? (Y/N) ---");
+                if ( continueOption.equalsIgnoreCase( "Y") || continueOption.equalsIgnoreCase("N") ) {
+                    break;
+                } else {
+                    System.out.println("--- Por favor, ingrese una opción válida (Y/N) ---");
+                }
+            }
 
-            Student student = new Student(studentName, level, age);
-            manager.registerStudent(student);
-            System.out.println("Registro exitoso del estudiante: " + student.getFullName() + "\n");
-            System.out.println("¿Desea agregar otro estudiante? (Y/N)");
-            String continueOption = scanner.nextLine().toUpperCase();
-            if (!continueOption.equals("Y")) {
+            if (continueOption.equalsIgnoreCase("N")) {
                 System.out.println("Registro de estudiantes finalizado \n");
                 break;
             } else {
                 System.out.println("Continuando con el registro de estudiantes \n");
-
             }
+
+
         }
-            //Step 4 =>
-            /* "Now we have spells and students, let's start the journey[...]"
-             * -- Menú ["View students base", "View spells base", "Start a learning Session"]
-             * -- Scanner --
-             * -- Validate Input --
-             * IF input is not valid => Exception and ask again
-             * -- If "View students base" => Show all students
-             * -- If "View spells base" => Show all spells
-             * -- If "Start a learning Session" => Go to Step 5
-             *
-             */
-            System.out.println("Ahora tenemos hechizos y estudiantes, comencemos la aventura \n");
-            while(true){
-                System.out.println("Menú: ");
-                System.out.println("1. Ver base de estudiantes");
-                System.out.println("2. Ver base de hechizos");
-                System.out.println("3. Iniciar sesión de aprendizaje");
-                System.out.println("4. Salir");
-                System.out.println("Seleccioanr opción: ");
+
+        Art.Column();
+
+        //Step 4 => Main menu after the initial setup
+        System.out.println(
+                "*============================== ** Ya tenemos hechizos y estudiantes, comencemos la aventura! ** ==============================* \n" +
+                "*------------------------------------------------------------------------------------------------------------------------------* \n" +
+                "*============================== ** SOUT ACADEMY - La academia más prestigiosa de esta dimensión ** ============================* \n"
+        );
+        while(true){ // while to keep the program running until the user decides to exit
+            try {
+                System.out.println(
+                    """
+                    
+                    
+                    *==============================================================================================================================*
+                    |                                                  MENÚ DE NAVEGACIÓN                                                          |
+                    *==============================================================================================================================*
+                    |                                                                                                                              |
+                    |                                       1. Ver base de estudiantes                                                             |
+                    |                                       2. Ver base de hechizos                                                                |
+                    |                                       3. Iniciar sesión de aprendizaje                                                       |
+                    |                                       4. Salir                                                                               |
+                    |                                                                                                                              |
+                    |------------------------------------------------------------------------------------------------------------------------------|
+                    |                                       Selecciona una opción y presiona Enter                                                 |
+                    *==============================================================================================================================*
+
+                    """
+                );
+                System.out.print("Escriba aquí la opción: ");
                 int option = scanner.nextInt();
                 scanner.nextLine(); // Consume the newline character
 
                 switch (option) {
                     case 1:
+                        Art.LoadingSimulation();
                         System.out.println("Lista de estudiantes: ");
-                        manager.getStudents().forEach(student -> System.out.println(student.getFullName()));
-                        System.out.println("Estudiantes registrados: ");
+                        manager.getStudents().forEach(student -> System.out.println("- " + student.toString())); // Print the list of students using the toString() method
+                        System.out.println("---");
                         break;
                     case 2:
+                        Art.LoadingSimulation();
                         System.out.println("Lista de hechizos: ");
-                        manager.getSpells().forEach(spell -> System.out.println(spell.toString()));
+                        manager.getSpells().forEach(spell -> System.out.println(spell.toString())); // Print the list of spells using the toString() method
+                        System.out.println("---");
                         break;
                     case 3:
-                        LearningSession session = new LearningSession(manager, scanner);
-                        session.start();
+                        Art.Column();
+                        LearningSession session = new LearningSession(manager, scanner); // Instance of LearningSession class with the manager and scanner instances to execute the main action
+                        session.start(); // Calls the public void start method of the LearningSession class
                         break;
                     case 4:
-                        System.out.println("ADIOS NO VUELVAS...");
-                        scanner.close();
+                        System.out.println("ADIOS! NO VUELVAS...");
+                        Art.LittleMadThing();
+                        System.out.println("---");
+                        scanner.close(); // Close the scanner
                         return; // Exit the program
                     default:
                         System.out.println("Opción no válida, intente nuevamente.");
-                        continue;
+                        System.out.println("---");
+                        //continue; // I commented this because IntelliJ has complained about it ._.
                 }
+            } catch (InputMismatchException e) { // Use the InputMismatchException to catch invalid inputs (built-in exception)
+                    System.out.println("Por favor, ingrese un número válido para la opción.");
+                    scanner.nextLine(); // Consume the invalid input
             }
 
-            //Step 5 =>
-            /*
-             * WHEN OPTION IT'S 3
-             * "Please select a student[...]"
-             * -- Show all students
-             * -- Scanner --
-             * -- Validate Input --
-             * IF input is not valid => Exception and ask again
-             * IF student id is not valid =>  Exception and ask again
-             * -- Show student info (to see spells and skillLevel)
-             * -- Show spells
-             * -- Scanner --
-             * -- Validate Input --
-             * IF input is not valid => Exception and ask again
-             * IF spell id is not valid => Exception and ask again
-             * -- Show spell info (to see spellName and skillLevel)
-             * -- Validate student's skillLevel
-             * IF student skillLevel is lower than spell skillLevel => Exception and go to Step 4
-             * -- Validate if student already tried to learne the spell
-             * IF student already tried to learn the spell => Exception and go to Step 4
-             * -- Add spell to student spellsLearned
-             * "Start a new learning session?[...]
-             * Options: "Y" or "N"
-             * -- Scanner --
-             * -- Validate Input --
-             * IF input is not valid => Exception and ask again
-             * IF "Y" => Go to Step 5
-             * IF "N" => Go to Step 4 (Menú)
-             *
-             */
-
-
+        }
 
     }
+
 }

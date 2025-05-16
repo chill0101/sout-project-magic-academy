@@ -20,7 +20,7 @@ public abstract class Person {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(String fullName) { // currently not used
         this.fullName = fullName;
     }
 
@@ -28,7 +28,7 @@ public abstract class Person {
         return skillLevel;
     }
 
-    public void setSkillLevel(SkillLevel skillLevel) {
+    public void setSkillLevel(SkillLevel skillLevel) { // currently not used
         this.skillLevel = skillLevel;
     }
 
@@ -36,10 +36,11 @@ public abstract class Person {
         return spellsLearned;
     }
 
-    public void setSpellsLearned(ArrayList<Spell> spellsLearned) {
+    public void setSpellsLearned(ArrayList<Spell> spellsLearned) { // currently not used
         this.spellsLearned = spellsLearned;
     }
 
+    // Person class is abstract, so it cannot be instantiated directly
 
 
 }

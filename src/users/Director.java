@@ -12,15 +12,15 @@ public class Director extends Person {
         public static Director getInstance(String fullName) {
             if (instance == null) {
                 instance = new Director(fullName, SkillLevel.ISTARI);
-                System.out.println("Director instance created");
+                System.out.println(">>>>>>>>>>> Director instance created");
             } else {
-                System.out.println("Director instance already exists");
+                System.out.println(">>>>>>>>>>> Director instance already exists");
             }
             return instance;
         }
 
 
-
+// This class is a singleton, so the constructor is private
 
 
 

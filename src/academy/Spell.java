@@ -5,7 +5,7 @@ public class Spell {
     private String element;
     private SkillLevel level;
 
-    public Spell(String name, String element, SkillLevel level) {
+    public Spell(String name, String element, SkillLevel level) { // Constructor
         this.name = name;
         this.element = element;
         this.level = level;
@@ -37,10 +37,7 @@ public class Spell {
 
     @Override
     public String toString() {
-        return "Spell{" +
-                "Nombre: " + name + '\'' +
-                ", Elemento: " + element + '\'' +
-                ", Nivel Requerido: " + level +
-                '}';
+        return
+                "- | Nombre: " + name + " | Elemento: " + element + " | Nivel Requerido: "+ level + " |";
     }
 }
