@@ -1,3 +1,8 @@
+/**
+ * Person class representing a user in the academy.
+ * This class is abstract and cannot be instantiated directly.
+ * It contains common attributes and methods for all users in the academy.
+ */
 package users;
 
 import academy.SkillLevel;

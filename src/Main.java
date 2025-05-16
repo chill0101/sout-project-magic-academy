@@ -12,9 +12,8 @@ import utils.InputUtils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-public class Main {
+public class Main { // Entry point of the program
     public static void main(String[] args) {
         // For a better experience, open the console in full screen :D
 

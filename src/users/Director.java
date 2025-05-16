@@ -1,3 +1,9 @@
+/**
+ * This class is a singleton, so the constructor is private
+ * It represents the Director of the academy, who is a special type of Person.
+ * Has the maximum skill level (ISTARI) and is responsible for supervising the academy.
+ */
+
 package users;
 
 import academy.SkillLevel;

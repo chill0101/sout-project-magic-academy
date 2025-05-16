@@ -1,3 +1,11 @@
+/**
+ * Student class representing a student in the academy.
+ * This class extends the Person class and contains additional attributes and methods specific to students.
+ * It includes the student's age and a list of spells they have tried to learn and already learned.
+ * Also the SkillLevel that is required to learn Spells.
+ *
+ */
+
 package users;
 
 

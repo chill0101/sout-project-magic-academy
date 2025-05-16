@@ -1,3 +1,7 @@
+/**
+ * This class represents a Spell in the academy.
+ * It contains the name of the spell, its element, and the required skill level to learn it.
+ */
 package academy;
 
 public class Spell {

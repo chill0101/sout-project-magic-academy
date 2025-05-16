@@ -1,3 +1,11 @@
+/**
+ * This class is responsible for implement the learning session of the academy.
+ * It allows the user to select a student and a spell, and then attempts to learn the spell.
+ * It handles user input and exceptions related to the learning process.
+ * For the process, we use validations and while loops for handling user input and control flow.
+ *
+ */
+
 package academy;
 
 import exceptions.AlreadyTriedToLearn;

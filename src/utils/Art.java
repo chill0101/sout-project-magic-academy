@@ -1,7 +1,7 @@
 package utils;
 
 public class Art {
-    // ASCII art and decorations for the program
+    // ASCII art and decorations for the program - This class is only for visual purposes
     public static void BannerArt() {
         System.out.println("    _  _  _    ______  _________ _______  _                 _______  _       _________ ______   _______          _______    _  _    \n" +
                 "   / )/ )/ )  (  ___ \\ \\__   __/(  ____ \\( (    /||\\     /|(  ____ \\( (    /|\\__   __/(  __  \\ (  ___  )        (  ___  )  ( \\( \\   \n" +

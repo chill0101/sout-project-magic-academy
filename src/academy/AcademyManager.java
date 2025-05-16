@@ -1,3 +1,10 @@
+/**
+ * This class is responsible for managing the academy,
+ * including registering spells and students, and facilitating the learning process.
+ * We use the Singleton pattern to ensure that only one instance of the AcademyManager exists.
+ * It also implements the Learnable interface to provide the learn method.
+ * For the process, we use validations and while loops for handling user input and control flow.
+ */
 package academy;
 
 import exceptions.AlreadyTriedToLearn;
